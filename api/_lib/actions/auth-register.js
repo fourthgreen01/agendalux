@@ -1,14 +1,14 @@
 'use strict';
-/* POST /api/auth/register  { slug, name, email, phone, password }
+/* POST /api/auth?action=register  { slug, name, email, phone, password }
    Cria APENAS conta de cliente. Admin não tem tela de criação:
    é inserido direto no banco (supabase/schema.sql). */
 
 const {
   ok, fail, methodGuard, handler, readBody, guardMutation, limit,
   isEmail, clean, cleanPhone, passwordOk, dbFrom
-} = require('./_lib/http');
-const { hashPassword, setSessionCookie, createSession } = require('./_lib/security');
-const { findTenant, audit } = require('./_lib/db');
+} = require('../http');
+const { hashPassword, setSessionCookie, createSession } = require('../security');
+const { findTenant, audit } = require('../db');
 
 module.exports = handler(async (req, res) => {
   if (!methodGuard(res, req, ['POST'])) return;
@@ -61,7 +61,7 @@ module.exports = handler(async (req, res) => {
   setSessionCookie(res, token);
   await audit(db, {
     tenantId: tenant.id, userId: created.id, action: 'auth.register', entity: 'user',
-    entityId: created.id, ip: require('./_lib/security').clientIp(req)
+    entityId: created.id, ip: require('../security').clientIp(req)
   });
 
   ok(res, {

@@ -8,7 +8,7 @@
        (select id from public.tenants where slug = 'barbearia-do-luiz'),
        'dono@exemplo.com',
        'Luiz',
-       '<cole aqui o hash gerado pela API: POST /api/auth/hash>',
+       '<cole aqui o hash gerado pela API: POST /api/auth?action=hash>',
        'admin'
      );
    ═══════════════════════════════════════════════════════════════════ */

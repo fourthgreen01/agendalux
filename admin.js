@@ -2,7 +2,7 @@
    ADMIN.JS — painel do gestor (exige login com role "admin")
    • foto de perfil do atendente
    • alterar o SLUG (endereço) da página
-   • tudo salva via API (/api/admin/*) — no modo demonstração, no navegador
+   • tudo salva via API (/api/admin?section=...) — no modo demonstração, no navegador
    ═══════════════════════════════════════════════════════════════════ */
 
 let adminTab = 'geral';

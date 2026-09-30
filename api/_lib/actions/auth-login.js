@@ -1,19 +1,19 @@
 'use strict';
-/* POST /api/auth/login  { slug, email, password }
+/* POST /api/auth?action=login  { slug, email, password }
    Senhas: PBKDF2-HMAC-SHA256. Erros são sempre genéricos (sem vazar
    se o e-mail existe) e o tempo de resposta é igual nos dois casos. */
 
 const {
   ok, fail, methodGuard, handler, readBody, guardMutation, limit,
   isEmail, clean, dbFrom
-} = require('./_lib/http');
-const { verifyPassword, setSessionCookie, createSession } = require('./_lib/security');
-const { findTenant, audit } = require('./_lib/db');
+} = require('../http');
+const { verifyPassword, setSessionCookie, createSession } = require('../security');
+const { findTenant, audit } = require('../db');
 
 /* hash "fantasma" p/ igualar o tempo quando o e-mail não existe */
 let DUMMY = null;
 function dummyVerify(password) {
-  if (!DUMMY) DUMMY = require('./_lib/security').hashPassword('agenda-lux-phantom-000');
+  if (!DUMMY) DUMMY = require('../security').hashPassword('agenda-lux-phantom-000');
   verifyPassword(password, DUMMY);
 }
 
@@ -59,7 +59,7 @@ module.exports = handler(async (req, res) => {
     .eq('id', user.id).then(() => {}, () => {});
   await audit(db, {
     tenantId: tenant.id, userId: user.id, action: 'auth.login', entity: 'user',
-    entityId: user.id, ip: require('./_lib/security').clientIp(req)
+    entityId: user.id, ip: require('../security').clientIp(req)
   });
 
   ok(res, {

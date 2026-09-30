@@ -1,8 +1,8 @@
 'use strict';
-/* GET /api/auth/me — usuário da sessão atual (cookie HttpOnly) */
+/* GET /api/auth?action=me — usuário da sessão atual (cookie HttpOnly) */
 
-const { ok, fail, methodGuard, handler, dbFrom } = require('./_lib/http');
-const { currentUser } = require('./_lib/security');
+const { ok, fail, methodGuard, handler, dbFrom } = require('../http');
+const { currentUser } = require('../security');
 
 module.exports = handler(async (req, res) => {
   if (!methodGuard(res, req, ['GET'])) return;

@@ -1,8 +1,8 @@
 'use strict';
-/* POST /api/auth/logout — encerra a sessão e apaga o cookie */
+/* POST /api/auth?action=logout — encerra a sessão e apaga o cookie */
 
-const { ok, methodGuard, handler, guardMutation, dbFrom, fail } = require('./_lib/http');
-const { destroySession, clearSessionCookie } = require('./_lib/security');
+const { ok, methodGuard, handler, guardMutation, dbFrom, fail } = require('../http');
+const { destroySession, clearSessionCookie } = require('../security');
 
 module.exports = handler(async (req, res) => {
   if (!methodGuard(res, req, ['POST'])) return;

@@ -1,16 +1,16 @@
 'use strict';
-/* GET  /api/admin/config — configuração da empresa (painel)
-   PUT  /api/admin/config — salva textos, cores, horários, comodidades,
+/* GET  /api/admin?section=config — configuração da empresa (painel)
+   PUT  /api/admin?section=config — salva textos, cores, horários, comodidades,
         logo e o SLUG da página (multi-tenant)                          */
 
 const {
   ok, fail, methodGuard, handler, readBody, guardMutation, limit,
   clean, cleanMultiline, slugOk, isHex, isSafeUrl, clampInt, dbFrom
-} = require('./_lib/http');
-const { requireAdmin, logAction } = require('./_lib/auth');
-const { publicConfig, uploadAsset, audit } = require('./_lib/db');
-const { decodeDataUrl, extOf } = require('./_lib/image');
-const { clientIp } = require('./_lib/security');
+} = require('../http');
+const { requireAdmin, logAction } = require('../auth');
+const { publicConfig, uploadAsset, audit } = require('../db');
+const { decodeDataUrl, extOf } = require('../image');
+const { clientIp } = require('../security');
 
 const HEXES = ['bg', 'surface', 'ink', 'accent', 'line'];
 const URL_FIELDS = ['instagram', 'facebook'];

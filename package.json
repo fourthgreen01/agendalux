@@ -4,11 +4,13 @@
   "private": true,
   "description": "AgendaLux — SaaS de agendamentos multi-tenant (Vercel + Supabase)",
   "engines": {
-    "node": ">=18.17.0"
+    "node": "24.x"
   },
   "scripts": {
     "dev": "vercel dev",
-    "check": "node scripts/check.js"
+    "check": "node scripts/check.js",
+    "env:add": "vercel env add SUPABASE_URL production && vercel env add SUPABASE_SERVICE_ROLE_KEY production && vercel env add SUPABASE_BUCKET production",
+    "deploy": "vercel --prod"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4"

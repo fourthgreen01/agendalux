@@ -1,15 +1,15 @@
 'use strict';
 /* CRUD de serviços (somente admin)
-   GET    /api/admin/services
-   POST   /api/admin/services
-   PUT    /api/admin/services?id=...
-   DELETE /api/admin/services?id=...                                   */
+   GET    /api/admin?section=services
+   POST   /api/admin?section=services
+   PUT    /api/admin?section=services&id=...
+   DELETE /api/admin?section=services&id=...                                   */
 
 const {
   ok, fail, methodGuard, handler, readBody, guardMutation, limit,
   clean, clampInt, clampMoney
-} = require('./_lib/http');
-const { requireAdmin, logAction } = require('./_lib/auth');
+} = require('../http');
+const { requireAdmin, logAction } = require('../auth');
 
 const ID = (v) => /^[0-9a-f-]{10,64}$/i.test(String(v || ''));
 

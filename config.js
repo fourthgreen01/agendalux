@@ -151,25 +151,25 @@ const Data = {
   /* — sessão — */
   async login(email, password) {
     if (OFFLINE) return localLogin(email, password);
-    const r = await API.post('/api/auth/login', { slug: TENANT_SLUG, email: email, password: password });
+    const r = await API.post('/api/auth' + qs({ action: 'login' }), { slug: TENANT_SLUG, email: email, password: password });
     setSession(r.user);
     return r.user;
   },
   async register(payload) {
     if (OFFLINE) return localRegister(payload);
-    const r = await API.post('/api/auth/register', Object.assign({ slug: TENANT_SLUG }, payload));
+    const r = await API.post('/api/auth' + qs({ action: 'register' }), Object.assign({ slug: TENANT_SLUG }, payload));
     setSession(r.user);
     return r.user;
   },
   async logout() {
-    if (!OFFLINE) { try { await API.post('/api/auth/logout', {}); } catch (e) { /* segue */ } }
+    if (!OFFLINE) { try { await API.post('/api/auth' + qs({ action: 'logout' }), {}); } catch (e) { /* segue */ } }
     setSession(null);
   },
   async restoreSession() {
     const cached = readStore(K.ses, null);
     if (OFFLINE) { SESSION = cached && cached.id ? cached : null; return SESSION; }
     try {
-      const r = await API.get('/api/auth/me');
+      const r = await API.get('/api/auth' + qs({ action: 'me' }));
       SESSION = r.user;
       writeStore(K.ses, SESSION);
     } catch (e) {
@@ -205,7 +205,7 @@ const Data = {
   /* — painel — */
   async adminConfig() {
     if (OFFLINE) return clone(CONFIG);
-    return API.get('/api/admin/config' + qs({ slug: TENANT_SLUG }));
+    return API.get('/api/admin' + qs({ section: 'config', slug: TENANT_SLUG }));
   },
   async saveConfig(patch) {
     if (OFFLINE) {
@@ -215,7 +215,7 @@ const Data = {
       applyTheme();
       return clone(CONFIG);
     }
-    const r = await API.put('/api/admin/config', Object.assign({ slug: TENANT_SLUG }, patch));
+    const r = await API.put('/api/admin' + qs({ section: 'config', slug: TENANT_SLUG }), patch);
     CONFIG = mergeConfig(CONFIG, r);
     applyTheme();
     return r;
@@ -223,7 +223,7 @@ const Data = {
 
   async services() {
     if (OFFLINE) return clone(CONFIG.services || []);
-    const r = await API.get('/api/admin/services' + qs({ slug: TENANT_SLUG }));
+    const r = await API.get('/api/admin' + qs({ section: 'services', slug: TENANT_SLUG }));
     return r.services || [];
   },
   async saveService(s) {
@@ -233,8 +233,8 @@ const Data = {
       writeStore(K.cfg, CONFIG);
       return true;
     }
-    if (s.id) await API.put('/api/admin/services' + qs({ id: s.id, slug: TENANT_SLUG }), s);
-    else await API.post('/api/admin/services' + qs({ slug: TENANT_SLUG }), s);
+    if (s.id) await API.put('/api/admin' + qs({ section: 'services', id: s.id, slug: TENANT_SLUG }), s);
+    else await API.post('/api/admin' + qs({ section: 'services', slug: TENANT_SLUG }), s);
     return true;
   },
   async deleteService(id) {
@@ -243,12 +243,12 @@ const Data = {
       writeStore(K.cfg, CONFIG);
       return { ok: true };
     }
-    return API.del('/api/admin/services' + qs({ id: id, slug: TENANT_SLUG }));
+    return API.del('/api/admin' + qs({ section: 'services', id: id, slug: TENANT_SLUG }));
   },
 
   async staff() {
     if (OFFLINE) return clone(CONFIG.staff || []);
-    const r = await API.get('/api/admin/staff' + qs({ slug: TENANT_SLUG }));
+    const r = await API.get('/api/admin' + qs({ section: 'staff', slug: TENANT_SLUG }));
     return r.staff || [];
   },
   async saveStaff(p) {
@@ -260,8 +260,8 @@ const Data = {
       writeStore(K.cfg, CONFIG);
       return true;
     }
-    if (p.id) await API.put('/api/admin/staff' + qs({ id: p.id, slug: TENANT_SLUG }), p);
-    else await API.post('/api/admin/staff' + qs({ slug: TENANT_SLUG }), p);
+    if (p.id) await API.put('/api/admin' + qs({ section: 'staff', id: p.id, slug: TENANT_SLUG }), p);
+    else await API.post('/api/admin' + qs({ section: 'staff', slug: TENANT_SLUG }), p);
     return true;
   },
   async deleteStaff(id) {
@@ -270,7 +270,7 @@ const Data = {
       writeStore(K.cfg, CONFIG);
       return { ok: true };
     }
-    return API.del('/api/admin/staff' + qs({ id: id, slug: TENANT_SLUG }));
+    return API.del('/api/admin' + qs({ section: 'staff', id: id, slug: TENANT_SLUG }));
   }
 };
 

@@ -38,7 +38,7 @@ Não existe tela de criação de administrador: **o admin nasce no banco**.
 
 ```sql
 -- gere o hash da senha (uma vez)
---   POST  /api/auth/hash   {"password":"SuaSenha123"}
+--   POST  /api/auth?action=hash   {"password":"SuaSenha123"}
 --   ou localmente:
 node -e "const c=require('crypto');const s=c.randomBytes(16).toString('base64url');
 console.log('pbkdf2\$sha256\$150000\$'+s+'\$'+
@@ -60,15 +60,29 @@ Depois é só entrar em `https://agendalux.vercel.app/atelier-solano` → **Aces
 
 ## 3. Deploy na Vercel
 
+As variáveis de ambiente são adicionadas **antes** do primeiro deploy — senão o app
+sobe sem banco e cai no modo demonstração.
+
 ```bash
 npm i -g vercel
+
+# 1) cria/associa o projeto (pergunta nome e escopo)
 vercel link
-vercel --prod
+
+# 2) adiciona as 3 variáveis (pede o valor na hora)
+npm run env:add
+#   ou, uma a uma:
+#   vercel env add SUPABASE_URL production
+#   vercel env add SUPABASE_SERVICE_ROLE_KEY production
+#   vercel env add SUPABASE_BUCKET production
+
+# 3) só então publica
+npm run deploy        # = vercel --prod
 ```
 
-Ou conecte o repositório em [vercel.com/new](https://vercel.com/new).
-
-Em **Project → Settings → Environment Variables** adicione:
+Alternativa pelo painel: **vercel.com/new → Import** → *Project → Settings →
+Environment Variables* → adicione as 3 variáveis → volte para *Deployments* e
+dê **Redeploy**.
 
 | Variável | Valor |
 |---|---|
@@ -76,7 +90,14 @@ Em **Project → Settings → Environment Variables** adicione:
 | `SUPABASE_SERVICE_ROLE_KEY` | chave `service_role` |
 | `SUPABASE_BUCKET` | `assets` |
 
-Refaça o deploy depois de salvar as variáveis.
+> **Limite do plano Hobby:** no máximo **12 funções por deploy**. Por isso o back-end
+> usa **7**: `public`, `availability`, `health`, `bookings`, `bookings/[id]`,
+> `auth` (login/register/logout/me/hash via `?action=`) e `admin`
+> (config/services/staff via `?section=`). Não adicione arquivos novos em `api/`
+> sem unificar antes.
+
+Depois de trocar uma variável, faça um **redeploy** (variáveis só valem para
+deployments novos).
 
 ## 4. Roteamento multi-tenant
 

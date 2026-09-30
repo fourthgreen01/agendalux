@@ -1,5 +1,5 @@
 'use strict';
-/* POST /api/auth/hash  { password }
+/* POST /api/auth?action=hash  { password }
    Utilitário de infraestrutura: gera o hash PBKDF2-SHA256 para você
    colar no SQL quando criar um ADMIN diretamente no banco
    (não existe tela de criação de administrador, por decisão de projeto).
@@ -12,8 +12,8 @@
 
 const {
   ok, fail, methodGuard, handler, readBody, guardMutation, limit, passwordOk, clean
-} = require('./_lib/http');
-const { hashPassword, clientIp } = require('./_lib/security');
+} = require('../http');
+const { hashPassword, clientIp } = require('../security');
 
 module.exports = handler(async (req, res) => {
   if (!methodGuard(res, req, ['POST'])) return;

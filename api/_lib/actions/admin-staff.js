@@ -1,9 +1,9 @@
 'use strict';
 /* CRUD de atendentes (somente admin) + FOTO DE PERFIL
-   GET    /api/admin/staff
-   POST   /api/admin/staff
-   PUT    /api/admin/staff?id=...
-   DELETE /api/admin/staff?id=...
+   GET    /api/admin?section=staff
+   POST   /api/admin?section=staff
+   PUT    /api/admin?section=staff&id=...
+   DELETE /api/admin?section=staff&id=...
 
    A foto é enviada como dataURL já redimensionada no navegador,
    validada por magic bytes e salva no Supabase Storage.             */
@@ -11,10 +11,10 @@
 const {
   ok, fail, methodGuard, handler, readBody, guardMutation, limit,
   clean, cleanPhone, isDataImage
-} = require('./_lib/http');
-const { requireAdmin, logAction } = require('./_lib/auth');
-const { uploadAsset } = require('./_lib/db');
-const { decodeDataUrl, extOf } = require('./_lib/image');
+} = require('../http');
+const { requireAdmin, logAction } = require('../auth');
+const { uploadAsset } = require('../db');
+const { decodeDataUrl, extOf } = require('../image');
 
 const ID = (v) => /^[0-9a-f-]{10,64}$/i.test(String(v || ''));
 
