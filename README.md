@@ -58,6 +58,50 @@ values (
 
 Depois é só entrar em `https://agendalux.vercel.app/atelier-solano` → **Acesso do gestor**.
 
+### 2.1 Criar outra empresa (SQL)
+
+Uma empresa nova = 1 insert em `tenants` + 1 insert em `users`. No mesmo segundo,
+`/slug-novo` já está no ar — serviços, equipe e horários o dono cadastra pelo painel.
+
+```sql
+-- 1) a empresa (slug = endereço da página)
+insert into public.tenants (slug, name, tagline, is_active)
+values ('barbearia-do-luiz', 'Barbearia do Luiz', 'Corte & barba', true)
+on conflict (slug) do nothing;
+
+-- 2) o administrador dela (gere o hash em /api/auth?action=hash)
+insert into public.users (tenant_id, email, name, password_hash, role)
+select t.id, 'dono@exemplo.com', 'Luiz',
+       '<cole o hash aqui>', 'admin'
+from public.tenants t where t.slug = 'barbearia-do-luiz';
+
+-- 3) expediente mínimo (sem horário o site marca como "fechado")
+update public.tenants set hours =
+  '{"0":{"open":false,"from":"09:00","to":"14:00","slot":30},
+    "1":{"open":true,"from":"09:00","to":"19:00","slot":30},
+    "2":{"open":true,"from":"09:00","to":"19:00","slot":30},
+    "3":{"open":true,"from":"09:00","to":"19:00","slot":30},
+    "4":{"open":true,"from":"09:00","to":"20:00","slot":30},
+    "5":{"open":true,"from":"09:00","to":"20:00","slot":30},
+    "6":{"open":true,"from":"09:00","to":"18:00","slot":30}}'::jsonb
+where slug = 'barbearia-do-luiz';
+
+-- 4) (opcional) serviços e equipe já com o primeiro atendente
+insert into public.services (tenant_id, name, description, price, duration_min, sort_order)
+select t.id, 'Corte', 'Corte e finalização', 60, 45, 1
+from public.tenants t where t.slug = 'barbearia-do-luiz'
+  and not exists (select 1 from public.services s where s.tenant_id = t.id);
+
+insert into public.staff (tenant_id, name, role, sort_order)
+select t.id, 'Luiz', 'Barbeiro', 1
+from public.tenants t where t.slug = 'barbearia-do-luiz'
+  and not exists (select 1 from public.staff s where s.tenant_id = t.id);
+```
+
+Troque `false` → `true` em `is_default` se quiser que ela seja a página da raiz
+(só pode existir um; o índice único impede dois). Apagar a empresa (`delete`)
+remove em cascata serviços, equipe, agendamentos e sessões.
+
 ## 3. Deploy na Vercel
 
 As variáveis de ambiente são adicionadas **antes** do primeiro deploy — senão o app
