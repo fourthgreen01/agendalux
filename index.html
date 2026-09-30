@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#F4EFE6">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Agendamento online — escolha o serviço, o horário e o profissional em menos de um minuto.">
+<meta name="robots" content="index,follow">
+<title>Agendamentos</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Outfit:wght@300..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ════════ TELA DE CARREGAMENTO (splash.js controla) ════════ -->
+<div id="splash" class="splash" role="status" aria-live="polite">
+  <div class="splash-inner">
+    <div id="splash-box" class="splash-box">
+      <div class="splash-mark" aria-hidden="true">
+        <svg viewBox="0 0 100 100">
+          <circle class="ring-bg" cx="50" cy="50" r="44"/>
+          <circle class="ring-fg" cx="50" cy="50" r="44"/>
+        </svg>
+        <span class="splash-dot"></span>
+      </div>
+      <div class="splash-track"><div id="splash-bar" class="splash-bar"></div></div>
+      <div id="splash-label" class="splash-label">Carregando…</div>
+    </div>
+
+    <div id="splash-error" class="splash-error hidden">
+      <div class="splash-warn">!</div>
+      <h1>Não foi possível carregar</h1>
+      <p id="splash-error-text">Confira sua conexão e tente novamente.</p>
+      <button id="splash-retry" class="btn btn-solid" type="button">Tentar novamente</button>
+    </div>
+  </div>
+</div>
+
+<noscript>
+  <div style="padding:60px 24px;text-align:center;font-family:sans-serif">
+    <h1>JavaScript está desativado</h1>
+    <p>Ative o JavaScript no navegador para usar este site de agendamentos.</p>
+  </div>
+</noscript>
+
+<div id="app"></div>
+<div id="modal-root"></div>
+<div id="toast-root"></div>
+
+<script src="splash.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+<script src="admin.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+</body>
+</html>

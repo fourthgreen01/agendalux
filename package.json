@@ -1,0 +1,16 @@
+{
+  "name": "agendalux",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AgendaLux — SaaS de agendamentos multi-tenant (Vercel + Supabase)",
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "scripts": {
+    "dev": "vercel dev",
+    "check": "node scripts/check.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4"
+  }
+}
