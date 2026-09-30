@@ -10,6 +10,9 @@ module.exports = handler(async (req, res) => {
   const ctx = await currentUser(req, db);
   if (!ctx) return fail(res, 401, 'Sessão inválida');
   ok(res, {
-    user: { id: ctx.user.id, name: ctx.user.name, email: ctx.user.email, role: ctx.user.role }
+    user: {
+      id: ctx.user.id, name: ctx.user.name, email: ctx.user.email,
+      phone: ctx.user.phone || '', role: ctx.user.role
+    }
   });
 });

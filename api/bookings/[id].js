@@ -4,8 +4,8 @@
 
 const {
   ok, fail, methodGuard, handler, readBody, guardMutation, limit, dbFrom
-} = require('./_lib/http');
-const { requireAdmin, logAction } = require('./_lib/auth');
+} = require('../_lib/http');
+const { requireAdmin, logAction } = require('../_lib/auth');
 
 const STATUSES = ['pago', 'confirmado', 'concluido', 'cancelado', 'nao_compareceu'];
 

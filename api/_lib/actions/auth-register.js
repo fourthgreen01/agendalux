@@ -65,7 +65,7 @@ module.exports = handler(async (req, res) => {
   });
 
   ok(res, {
-    user: { id: created.id, name: created.name, email: created.email, role: created.role },
+    user: { id: created.id, name: created.name, email: created.email, phone: created.phone || '', role: created.role },
     tenant: { slug: tenant.slug, name: tenant.name }
   });
 });

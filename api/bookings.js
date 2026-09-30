@@ -42,7 +42,8 @@ async function createBooking(req, res) {
   const notes = cleanMultiline(b.notes, 500);
   const cust = b.customer || {};
   const name = clean(cust.name, 80);
-  const phone = cleanPhone(cust.phone);
+  let phone = cleanPhone(cust.phone);
+  let phoneRaw = clean(cust.phone, 20);
   const email = clean(cust.email, 120).toLowerCase();
 
   if (!slug) return fail(res, 400, 'Endereço da página não informado');
@@ -51,12 +52,28 @@ async function createBooking(req, res) {
   if (!/^[0-9a-f-]{10,64}$/i.test(staffId)) return fail(res, 400, 'Profissional inválido');
   if (PAYMENTS.indexOf(payment) < 0) return fail(res, 400, 'Forma de pagamento inválida');
   if (name.length < 2) return fail(res, 400, 'Informe seu nome completo');
-  if (!phone) return fail(res, 400, 'Telefone inválido (mínimo 10 dígitos)');
   if (email && !isEmail(email)) return fail(res, 400, 'E-mail inválido');
 
   const db = dbFrom(req);
   const tenant = await findTenant(slug);
   if (!tenant || !tenant.is_active) return fail(res, 404, 'Página não encontrada');
+
+  /* cliente logado? (opcional — visitante também pode agendar) */
+  let customerId = null;
+  let account = null;
+  const ctx = await currentUser(req, db);
+  if (ctx && ctx.user.role === 'customer' && ctx.tenantId === tenant.id) {
+    customerId = ctx.user.id;
+    account = ctx.user;
+  }
+
+  /* o payload veio sem telefone? (conta logada não reenvia o campo)
+     usa o telefone guardado no cadastro da conta logada. */
+  if (!phone && account) {
+    phone = cleanPhone(account.phone);
+    phoneRaw = clean(account.phone, 20);
+  }
+  if (!phone) return fail(res, 400, 'Telefone inválido (mínimo 10 dígitos)');
 
   const today = new Date().toISOString().slice(0, 10);
   if (date < today) return fail(res, 400, 'Não é possível agendar no passado');
@@ -103,11 +120,6 @@ async function createBooking(req, res) {
     .neq('status', 'cancelado').gte('date', today);
   if ((count || 0) >= 8) return fail(res, 429, 'Muitos horários reservados para este telefone — fale conosco');
 
-  /* cliente logado? (opcional — visitante também pode agendar) */
-  let customerId = null;
-  const ctx = await currentUser(req, db);
-  if (ctx && ctx.user.role === 'customer' && ctx.tenantId === tenant.id) customerId = ctx.user.id;
-
   const status = 'confirmado';
   const { data: row, error } = await db.from('bookings').insert({
     tenant_id: tenant.id,
@@ -121,7 +133,7 @@ async function createBooking(req, res) {
     date: date,
     time: time,
     customer_name: name,
-    customer_phone: clean(cust.phone, 20),
+    customer_phone: phoneRaw,
     customer_email: email,
     payment: payment,
     notes: notes,
@@ -150,7 +162,7 @@ async function createBooking(req, res) {
       price: Number(row.price),
       date: row.date, time: row.time,
       payment: payment, status: row.status,
-      customer: { name: name, phone: clean(cust.phone, 20), email: email },
+      customer: { name: name, phone: phoneRaw, email: email },
       notes: notes,
       createdAt: Date.now()
     }

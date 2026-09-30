@@ -72,7 +72,7 @@ function writeStore(k, v) {
 let CONFIG = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
 let TENANT_SLUG = DEFAULT_CONFIG.slug;
 let OFFLINE = false;          /* true = sem backend, modo demonstração */
-let SESSION = null;           /* {id,name,email,role} — a senha nunca fica aqui */
+let SESSION = null;           /* {id,name,email,phone,role} — a senha nunca fica aqui */
 const AVAIL = {};             /* cache de horários ocupados por data */
 
 function clone(o) { return JSON.parse(JSON.stringify(o)); }

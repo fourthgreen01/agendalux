@@ -1,5 +1,6 @@
 'use strict';
-/* Verifica a sintaxe de TODOS os .js do projeto (node --check).
+/* Verifica a sintaxe de TODOS os .js do projeto (node --check) e se todo
+   require() relativo aponta para um arquivo que existe.
    Uso: npm run check */
 
 const { execFileSync } = require('child_process');
@@ -20,7 +21,30 @@ function walk(dir, out) {
   return out;
 }
 
+/* resolve um require() relativo — pega o clássico './_lib/x' dentro de
+   api/bookings/, que só explode em produção (Vercel FUNCTION_INVOCATION_FAILED) */
+function exists(base) {
+  const tries = [base, base + '.js', base + '.json',
+    path.join(base, 'index.js'), path.join(base, 'index.json')];
+  return tries.some((p) => {
+    try { return fs.statSync(p).isFile(); } catch (e) { return false; }
+  });
+}
+
+function missingRequires(file) {
+  const src = fs.readFileSync(file, 'utf8');
+  const out = [];
+  const re = /require\(\s*(['"])(\.{1,2}\/[^'"]+)\1\s*\)/g;
+  let m;
+  while ((m = re.exec(src))) {
+    const target = path.resolve(path.dirname(file), m[2]);
+    if (!exists(target)) out.push(m[2]);
+  }
+  return out;
+}
+
 let bad = 0;
+let broken = 0;
 const files = walk(ROOT);
 files.forEach((file) => {
   const rel = path.relative(ROOT, file);
@@ -32,10 +56,17 @@ files.forEach((file) => {
     console.error('  ERRO  ' + rel);
     console.error(String(e.stderr || e.message).trim());
   }
+  const missing = missingRequires(file);
+  if (missing.length) {
+    broken++;
+    console.error('  ERRO  ' + rel + '  require() sem arquivo:');
+    missing.forEach((p) => console.error('          ' + p));
+  }
 });
 
-console.log(`\n${files.length - bad}/${files.length} arquivos válidos`);
-if (bad) {
-  console.error(`${bad} arquivo(s) com erro de sintaxe`);
+console.log(`\n${files.length - bad}/${files.length} arquivos válidos` +
+  (broken ? ` (${broken} com require() quebrado)` : ''));
+if (bad || broken) {
+  console.error(`${bad} erro(s) de sintaxe, ${broken} require(s) quebrado(s)`);
   process.exit(1);
 }

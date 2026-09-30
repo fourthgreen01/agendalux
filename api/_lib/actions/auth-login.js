@@ -63,7 +63,7 @@ module.exports = handler(async (req, res) => {
   });
 
   ok(res, {
-    user: { id: user.id, name: user.name, email: user.email, role: user.role },
+    user: { id: user.id, name: user.name, email: user.email, phone: user.phone || '', role: user.role },
     tenant: { slug: tenant.slug, name: tenant.name }
   });
 });
