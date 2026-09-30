@@ -382,3 +382,29 @@ lateral (values
 ) as v(name, role, sort_order)
 where t.slug = 'atelier-solano'
   and not exists (select 1 from public.staff s where s.tenant_id = t.id);
+
+/* ════════════ SUPABASE ADVISOR — endurecimento ════════════
+   Bloco idempotente: roda num banco novo (fim do schema) OU sozinho num banco
+   já criado, para apagar os avisos críticos do Advisor.
+   Nenhum deles impede o app de funcionar — é higiene de segurança.            */
+
+/* Security Definer View → a view usa as permissões de quem consulta,
+   não a do dono (só service_role continua enxergando tudo) */
+alter view public.v_whatsapp_contacts set (security_invoker = true);
+alter view public.v_ready_messages     set (security_invoker = true);
+alter view public.v_upcoming_bookings  set (security_invoker = true);
+
+/* Function Search Path Mutable → search_path travado em cada função */
+alter function public.to_e164(text, text)            set search_path = public;
+alter function public.normalize_tenant_phones()      set search_path = public;
+alter function public.normalize_staff_phones()       set search_path = public;
+alter function public.normalize_booking_phones()     set search_path = public;
+alter function public.normalize_user_phones()        set search_path = public;
+alter function public.touch_updated_at()             set search_path = public;
+alter function public.enqueue_reminder()             set search_path = public;
+
+/* RLS Enabled No Policy → política que nega tudo;
+   só o service_role (que bypassa RLS) escreve/le a auditoria */
+drop policy if exists "sem acesso publico" on public.audit_log;
+create policy "sem acesso publico" on public.audit_log
+  for all using (false) with check (false);
