@@ -287,7 +287,7 @@ function slugFromPath() {
   if (!p) return '';
   if (/\.[a-z0-9]{1,5}$/i.test(p)) return '';            /* arquivo estático */
   p = p.split('/')[0].toLowerCase();
-  if (p === 'api' || p === 'index.html') return '';
+  if (p === 'api' || p === 'index.html' || p === 'app' || p === 'app.html') return '';
   if (!/^[a-z0-9-]{3,40}$/.test(p)) return '';
   return p;
 }

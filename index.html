@@ -5,60 +5,537 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#F4EFE6">
 <meta name="color-scheme" content="light">
-<meta name="description" content="Agendamento online — escolha o serviço, o horário e o profissional em menos de um minuto.">
+<meta name="description" content="Agende Já — agendamento online para salões, clínicas, estúdios e prestadores de serviço. Seu cliente marca o horário em 1 minuto e recebe lembrete no WhatsApp.">
 <meta name="robots" content="index,follow">
-<title>Agendamentos</title>
+<title>Agende Já — agendamento online para o seu negócio</title>
 
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/icon-512.png">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Outfit:wght@300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
-</head>
-<body>
 
-<!-- ════════ TELA DE CARREGAMENTO (splash.js controla) ════════ -->
-<div id="splash" class="splash" role="status" aria-live="polite">
-  <div class="splash-inner">
-    <div id="splash-box" class="splash-box">
-      <div class="splash-mark" aria-hidden="true">
-        <svg viewBox="0 0 100 100">
-          <circle class="ring-bg" cx="50" cy="50" r="44"/>
-          <circle class="ring-fg" cx="50" cy="50" r="44"/>
-        </svg>
-        <span class="splash-dot"></span>
-      </div>
-      <div class="splash-track"><div id="splash-bar" class="splash-bar"></div></div>
-      <div id="splash-label" class="splash-label">Carregando…</div>
+<style>
+/* ══════════ landing ══════════ */
+.lp-wrap{position:relative;z-index:1}
+.lp-brand{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-serif);
+  font-size:18px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--ink)}
+.lp-brand .lp-ico{width:30px;height:30px;border-radius:9px;background:var(--ink);color:var(--bg);
+  display:flex;align-items:center;justify-content:center}
+.lp-brand .lp-ico .lucide{width:16px;height:16px}
+.lp-nav{display:flex;align-items:center;gap:24px}
+.lp-nav a:not(.btn){font-size:12px}
+.lp-nav a:not(.btn):hover{color:var(--ink)}
+
+.lp-hero{padding:46px 0 60px}
+.lp-hero h1{font-size:clamp(42px,5.6vw,74px)}
+.lp-hero .tagline{font-size:18px;max-width:34em}
+.lp-hero-ph{display:flex;justify-content:center;padding-top:6px}
+
+.lp-note{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.lp-note .lucide{width:16px;height:16px;color:var(--accent)}
+
+.lp-sec{padding:64px 0 20px}
+.lp-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;margin-top:44px}
+.lp-step .num{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);
+  background:var(--surface);display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-serif);font-size:15px;font-weight:600;color:var(--accent);margin-bottom:16px}
+.lp-step h3{font-family:var(--font-serif);font-size:20px;font-weight:500;margin-bottom:6px;line-height:1.2}
+.lp-step p{font-size:13.5px;color:var(--muted);margin-bottom:18px;min-height:5.4em}
+
+.lp-demo{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;margin-top:48px}
+.lp-cap{text-align:center}
+.lp-cap .lp-capno{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.lp-cap h3{font-family:var(--font-serif);font-size:22px;font-weight:500;margin:6px 0 8px}
+.lp-cap p{font-size:14px;color:var(--muted);max-width:30em;margin:0 auto}
+
+.lp-cta{background:var(--surface);border:1px solid var(--line);border-radius:18px;
+  box-shadow:var(--shadow);padding:60px 32px;text-align:center;margin:70px 0 90px}
+.lp-cta h2{font-family:var(--font-serif);font-weight:500;font-size:clamp(30px,4vw,44px);
+  letter-spacing:-.01em;margin-bottom:10px}
+.lp-cta p{color:var(--muted);margin-bottom:28px}
+.lp-cta .btn{font-size:14px;padding:17px 34px}
+.lp-cta .lp-under{margin-top:16px;font-size:12.5px;color:var(--muted)}
+
+/* ══════════ mockup de celular ══════════ */
+.ph{position:relative;width:100%;max-width:272px;margin:0 auto;font-size:12px;
+  background:var(--ink);border-radius:36px;padding:9px;
+  box-shadow:0 26px 55px -26px rgba(29,26,22,.6)}
+.ph-lg{font-size:13.5px;max-width:292px}
+.ph::before{content:'';position:absolute;top:16px;left:50%;transform:translateX(-50%);
+  width:34%;height:15px;background:var(--ink);border-radius:999px;z-index:3}
+.ph-sc{position:relative;background:var(--surface);border-radius:28px;overflow:hidden;
+  min-height:470px;display:flex;flex-direction:column}
+.ph-st{display:flex;justify-content:space-between;padding:.6em 1.2em 0;font-size:.72em;
+  font-weight:600;color:var(--muted);letter-spacing:.04em}
+.ph-bd{flex:1;display:flex;flex-direction:column;gap:.7em;padding:1.4em 1.1em 1.1em}
+
+.ui-brand{display:flex;align-items:center;gap:.55em}
+.ui-logo{width:2em;height:2em;border-radius:50%;background:var(--ink);color:var(--bg);
+  display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);
+  font-weight:600;font-size:.95em;flex-shrink:0}
+.ui-bname{font-family:var(--font-serif);font-size:1.05em;font-weight:600;line-height:1.15}
+.ui-open{font-size:.58em;letter-spacing:.12em;text-transform:uppercase;color:var(--ok);
+  display:flex;align-items:center;gap:.35em}
+.ui-open::before{content:'';width:.5em;height:.5em;border-radius:50%;background:var(--ok)}
+.ui-addr{font-size:.72em;color:var(--muted);font-style:italic;font-family:var(--font-serif)}
+.ui-h{font-family:var(--font-serif);font-size:1.25em;font-weight:500;line-height:1.15}
+.ui-sub{font-size:.78em;color:var(--muted);margin-top:-.3em}
+.ui-card{background:var(--bg);border:1px solid var(--line);border-radius:.85em;padding:.55em .8em}
+.ui-info{display:flex;justify-content:space-between;font-size:.78em;padding:.3em 0;color:var(--muted)}
+.ui-info b{color:var(--ink);font-weight:600}
+.ui-row{display:flex;align-items:baseline;gap:.5em;padding:.55em 0;border-bottom:1px solid var(--line)}
+.ui-row:last-child{border-bottom:none}
+.ui-rname{font-family:var(--font-serif);font-size:1em;font-weight:500}
+.ui-rdesc{font-size:.68em;color:var(--muted);display:block;margin-top:1px}
+.ui-dots{flex:1;min-width:.7em;border-bottom:1px dotted var(--line);transform:translateY(-.25em)}
+.ui-price{font-family:var(--font-serif);font-size:.95em;font-weight:600;white-space:nowrap}
+.ui-dur{font-size:.58em;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;
+  text-align:right;white-space:nowrap;display:block}
+.ui-row.sel{background:color-mix(in srgb,var(--accent) 7%,transparent);
+  border-radius:.5em;padding-left:.45em;padding-right:.45em}
+.ui-row.sel .ui-rname{color:var(--accent)}
+.ui-lbl{font-size:.7em;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ui-date{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);
+  background:var(--bg);border-radius:.7em;padding:.55em .7em;font-size:.82em}
+.ui-date b{font-weight:600}
+.ui-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:.4em}
+.ui-slot{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:.42em 0;
+  text-align:center;font-size:.82em;font-variant-numeric:tabular-nums}
+.ui-slot.on{background:var(--ink);border-color:var(--ink);color:var(--bg);font-weight:600}
+.ui-slot.off{opacity:.3;text-decoration:line-through}
+.ui-staff{display:flex;align-items:center;gap:.55em;border:1px solid var(--line);
+  background:var(--bg);border-radius:.7em;padding:.45em .6em}
+.ui-staff.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.ui-av{width:1.8em;height:1.8em;border-radius:50%;
+  background:color-mix(in srgb,var(--accent) 14%,var(--surface));color:var(--accent);
+  display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);
+  font-size:.85em;font-weight:600;flex-shrink:0}
+.ui-sname{font-size:.8em;font-weight:600;line-height:1.2}
+.ui-srole{font-size:.66em;color:var(--muted)}
+.ui-srow{display:flex;justify-content:space-between;gap:.7em;padding:.38em 0;font-size:.8em;
+  border-bottom:1px solid color-mix(in srgb,var(--line) 60%,transparent)}
+.ui-srow:last-child{border-bottom:none}
+.ui-srow span{color:var(--muted);font-size:.78em;letter-spacing:.08em;text-transform:uppercase;padding-top:.15em}
+.ui-srow strong{font-weight:600;text-align:right}
+.ui-check{width:3.1em;height:3.1em;border-radius:50%;background:var(--accent);color:#fff;
+  display:flex;align-items:center;justify-content:center;margin:.2em auto 0}
+.ui-check .lucide{width:1.5em;height:1.5em}
+.ui-wa{display:flex;align-items:center;gap:.5em;background:color-mix(in srgb,var(--ok) 9%,var(--surface));
+  border:1px solid color-mix(in srgb,var(--ok) 32%,var(--line));border-radius:.7em;
+  padding:.5em .65em;font-size:.74em;color:var(--ok);line-height:1.35}
+.ui-wa .lucide{width:1.1em;height:1.1em;flex-shrink:0}
+.ui-steps{display:flex;align-items:center;justify-content:center;gap:.3em;margin-bottom:.2em}
+.ui-steps i{width:.72em;height:.72em;border-radius:50%;border:1px solid var(--line);
+  background:var(--surface);display:block}
+.ui-steps i.on{background:var(--accent);border-color:var(--accent)}
+.ui-steps i.cur{background:var(--ink);border-color:var(--ink)}
+.ui-steps b{width:1.5em;height:1px;background:var(--line);display:block}
+.ui-steps b.on{background:var(--accent)}
+.ui-btn{margin-top:auto;background:var(--ink);color:var(--bg);border-radius:999px;
+  text-align:center;padding:.8em .6em;font-size:.7em;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase}
+.ui-btn.acc{background:var(--accent);color:#fff}
+.ui-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.4em}
+.ui-stat{border:1px solid var(--line);background:var(--bg);border-radius:.6em;padding:.45em .4em;text-align:center}
+.ui-stat b{display:block;font-family:var(--font-serif);font-size:1.05em;font-weight:600}
+.ui-stat span{font-size:.55em;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ui-tag{display:inline-block;font-size:.58em;letter-spacing:.1em;text-transform:uppercase;
+  border:1px solid var(--line);border-radius:999px;padding:.25em .6em;color:var(--muted)}
+.ui-pend{margin-left:auto;font-size:.58em;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+
+@media(max-width:1000px){
+  .lp-steps{grid-template-columns:repeat(2,1fr);row-gap:44px}
+  .lp-step p{min-height:0}
+  .lp-demo{grid-template-columns:1fr;gap:52px}
+  .lp-demo .ph{max-width:300px}
+}
+@media(max-width:640px){
+  .lp-nav a:not(.btn){display:none}
+  .lp-steps{grid-template-columns:1fr}
+  .lp-hero{padding-top:26px}
+}
+</style>
+</head>
+
+<body>
+<div class="wordmark" aria-hidden="true">agende já</div>
+
+<div class="lp-wrap">
+
+<!-- ══════════ topo ══════════ -->
+<header class="container topbar">
+  <a class="lp-brand" href="/">
+    <span class="lp-ico"><i data-lucide="calendar-check"></i></span>
+    Agende Já
+  </a>
+  <nav class="lp-nav">
+    <a href="#como-funciona">Como funciona</a>
+    <a href="#demonstracao">Demonstração</a>
+    <a class="btn btn-solid btn-sm" href="https://wa.me/5544988074466" target="_blank" rel="noopener">Teste grátis 15 dias</a>
+  </nav>
+</header>
+
+<!-- ══════════ hero ══════════ -->
+<section class="container hero lp-hero">
+  <div>
+    <span class="status-badge"><span class="status-dot"></span>15 dias grátis · sem cartão</span>
+    <h1>Seu cliente agenda <em>sozinho</em>, 24 horas por dia.</h1>
+    <p class="tagline">Um link com a cara do seu negócio: serviços, equipe e horários. Ele escolhe, confirma e recebe o lembrete no WhatsApp — você só atende.</p>
+
+    <div class="amenities">
+      <span class="amenity"><i data-lucide="link-2"></i> Link com a sua marca</span>
+      <span class="amenity"><i data-lucide="smartphone"></i> Perfeito no celular</span>
+      <span class="amenity"><i data-lucide="message-circle"></i> Lembretes no WhatsApp</span>
+      <span class="amenity"><i data-lucide="layout-dashboard"></i> Painel de gestão</span>
     </div>
 
-    <div id="splash-error" class="splash-error hidden">
-      <div class="splash-warn">!</div>
-      <h1>Não foi possível carregar</h1>
-      <p id="splash-error-text">Confira sua conexão e tente novamente.</p>
-      <button id="splash-retry" class="btn btn-solid" type="button">Tentar novamente</button>
+    <div class="cta-row">
+      <a class="btn btn-accent" href="https://wa.me/5544988074466" target="_blank" rel="noopener">
+        Teste grátis 15 dias <i data-lucide="arrow-right"></i>
+      </a>
+      <span class="lp-note"><i data-lucide="clock"></i> No ar em minutos, sem instalar nada</span>
     </div>
   </div>
+
+  <!-- imagem do app: página pública -->
+  <div class="lp-hero-ph">
+    <div class="ph ph-lg">
+      <div class="ph-sc">
+        <div class="ph-st"><span>9:41</span><span>●●● ᯤ ▮</span></div>
+        <div class="ph-bd">
+          <div class="ui-brand">
+            <span class="ui-logo">B</span>
+            <span>
+              <span class="ui-bname">Bella Hair</span><br>
+              <span class="ui-open">Aberto agora</span>
+            </span>
+          </div>
+          <span class="ui-addr">Av. Rebouças, 1420 — Pinheiros</span>
+          <div>
+            <p class="ui-h">Escolha um serviço</p>
+            <p class="ui-sub">Toque em uma opção para selecioná-la</p>
+          </div>
+          <div class="ui-card">
+            <div class="ui-row">
+              <span><span class="ui-rname">Corte Feminino</span><span class="ui-rdesc">Lavagem, corte e finalização</span></span>
+              <span class="ui-dots"></span>
+              <span class="ui-price">R$ 90<span class="ui-dur">60 min</span></span>
+            </div>
+            <div class="ui-row sel">
+              <span><span class="ui-rname">Coloração</span><span class="ui-rdesc">Coloração completa com matização</span></span>
+              <span class="ui-dots"></span>
+              <span class="ui-price">R$ 220<span class="ui-dur">120 min</span></span>
+            </div>
+            <div class="ui-row">
+              <span><span class="ui-rname">Manicure</span><span class="ui-rdesc">Unhas das mãos com esmaltação</span></span>
+              <span class="ui-dots"></span>
+              <span class="ui-price">R$ 45<span class="ui-dur">40 min</span></span>
+            </div>
+          </div>
+          <div class="ui-wa"><i data-lucide="message-circle"></i> Dúvidas? Chame no WhatsApp da loja</div>
+          <div class="ui-btn acc">Agendar agora</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ passo a passo ══════════ -->
+<section class="container lp-sec" id="como-funciona">
+  <div class="page-head" style="padding-top:0">
+    <h2>Do clique ao horário marcado</h2>
+    <p>O passo a passo do seu cliente — 4 etapas, menos de 1 minuto, sem ligação e sem troca de mensagem.</p>
+  </div>
+
+  <div class="lp-steps">
+
+    <!-- 1 -->
+    <div class="lp-step">
+      <div class="num">1</div>
+      <h3>Abre o seu link</h3>
+      <p>Seu cliente acessa a sua página e vê logo, endereço, horários e equipe — tudo com a identidade do seu negócio.</p>
+      <div class="ph">
+        <div class="ph-sc">
+          <div class="ph-st"><span>9:41</span><span>●●● ᯤ ▮</span></div>
+          <div class="ph-bd">
+            <div class="ui-brand">
+              <span class="ui-logo">B</span>
+              <span>
+                <span class="ui-bname">Bella Hair</span><br>
+                <span class="ui-open">Aberto agora</span>
+              </span>
+            </div>
+            <span class="ui-addr">Av. Rebouças, 1420 — Pinheiros</span>
+            <div class="ui-card">
+              <div class="ui-info"><span>Hoje</span><b>09:00 — 19:00</b></div>
+              <div class="ui-info"><span>Sábado</span><b>08:00 — 17:00</b></div>
+              <div class="ui-info"><span>Equipe</span><b>3 profissionais</b></div>
+            </div>
+            <div class="ui-staff"><span class="ui-av">A</span><span><span class="ui-sname">Ana Beatriz</span><span class="ui-srole">Cabeleireira</span></span></div>
+            <div class="ui-staff"><span class="ui-av">J</span><span><span class="ui-sname">Juliana Castro</span><span class="ui-srole">Colorista</span></span></div>
+            <div class="ui-btn">Ver serviços</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="lp-step">
+      <div class="num">2</div>
+      <h3>Escolhe o serviço</h3>
+      <p>Preço e duração de cada opção na cara do cliente. Ele toca e seleciona — sem formulário, sem espera.</p>
+      <div class="ph">
+        <div class="ph-sc">
+          <div class="ph-st"><span>9:41</span><span>●●● ᯤ ▮</span></div>
+          <div class="ph-bd">
+            <div class="ui-steps"><i class="on"></i><b class="on"></b><i></i><b></b><i></i><b></b><i></i></div>
+            <div>
+              <p class="ui-h">Escolha o serviço</p>
+              <p class="ui-sub">Toque em uma opção para selecioná-la</p>
+            </div>
+            <div class="ui-card">
+              <div class="ui-row">
+                <span><span class="ui-rname">Corte Feminino</span><span class="ui-rdesc">Lavagem e finalização</span></span>
+                <span class="ui-dots"></span>
+                <span class="ui-price">R$ 90<span class="ui-dur">60 min</span></span>
+              </div>
+              <div class="ui-row sel">
+                <span><span class="ui-rname">Coloração</span><span class="ui-rdesc">Completa com matização</span></span>
+                <span class="ui-dots"></span>
+                <span class="ui-price">R$ 220<span class="ui-dur">120 min</span></span>
+              </div>
+              <div class="ui-row">
+                <span><span class="ui-rname">Hidratação</span><span class="ui-rdesc">Tratamento profundo</span></span>
+                <span class="ui-dots"></span>
+                <span class="ui-price">R$ 120<span class="ui-dur">60 min</span></span>
+              </div>
+              <div class="ui-row">
+                <span><span class="ui-rname">Pedicure</span><span class="ui-rdesc">Cutículas e esmaltação</span></span>
+                <span class="ui-dots"></span>
+                <span class="ui-price">R$ 55<span class="ui-dur">50 min</span></span>
+              </div>
+            </div>
+            <div class="ui-btn">Continuar</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="lp-step">
+      <div class="num">3</div>
+      <h3>Marca dia, hora e profissional</h3>
+      <p>O calendário mostra só o que está livre. Ele escolhe o horário e quem vai atender — sem dupla marcação.</p>
+      <div class="ph">
+        <div class="ph-sc">
+          <div class="ph-st"><span>9:41</span><span>●●● ᯤ ▮</span></div>
+          <div class="ph-bd">
+            <div class="ui-steps"><i class="on"></i><b class="on"></b><i class="on"></i><b class="on"></b><i class="cur"></i><b></b><i></i></div>
+            <div>
+              <p class="ui-h">Quando você quer vir?</p>
+              <p class="ui-sub">Só aparecem horários disponíveis</p>
+            </div>
+            <div class="ui-date"><span>Data</span><b>Sexta, 9 out</b></div>
+            <span class="ui-lbl">Horários disponíveis</span>
+            <div class="ui-slots">
+              <span class="ui-slot">09:00</span>
+              <span class="ui-slot off">09:30</span>
+              <span class="ui-slot">10:00</span>
+              <span class="ui-slot on">10:30</span>
+              <span class="ui-slot">11:00</span>
+              <span class="ui-slot off">11:30</span>
+            </div>
+            <div class="ui-staff on"><span class="ui-av">J</span><span><span class="ui-sname">Juliana Castro</span><span class="ui-srole">Colorista · disponível</span></span></div>
+            <div class="ui-staff"><span class="ui-av">P</span><span><span class="ui-sname">Patrícia Souza</span><span class="ui-srole">Manicure · disponível</span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="lp-step">
+      <div class="num">4</div>
+      <h3>Confirma e recebe no WhatsApp</h3>
+      <p>Resumo do agendamento, confirmação na hora e lembrete automático 2 horas antes. Chega de cliente esquecido.</p>
+      <div class="ph">
+        <div class="ph-sc">
+          <div class="ph-st"><span>9:41</span><span>●●● ᯤ ▮</span></div>
+          <div class="ph-bd">
+            <div class="ui-steps"><i class="on"></i><b class="on"></b><i class="on"></i><b class="on"></b><i class="on"></i><b class="on"></b><i class="on"></i></div>
+            <div class="ui-check"><i data-lucide="check"></i></div>
+            <div>
+              <p class="ui-h" style="text-align:center">Horário reservado!</p>
+              <p class="ui-sub" style="text-align:center">Chegue com 5 minutinhos de folga</p>
+            </div>
+            <div class="ui-card">
+              <div class="ui-srow"><span>Serviço</span><strong>Coloração</strong></div>
+              <div class="ui-srow"><span>Quando</span><strong>Sex, 9 out · 10:30</strong></div>
+              <div class="ui-srow"><span>Profissional</span><strong>Juliana Castro</strong></div>
+              <div class="ui-srow"><span>Total</span><strong>R$ 220</strong></div>
+            </div>
+            <div class="ui-wa"><i data-lucide="message-circle"></i> Você recebe um lembrete no WhatsApp 2 horas antes</div>
+            <div class="ui-btn acc">Lembrar-me do horário</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════ demonstração ══════════ -->
+<section class="container lp-sec" id="demonstracao">
+  <div class="page-head" style="padding-top:0">
+    <h2>Veja o app por dentro</h2>
+    <p>Três telas principais — o que o cliente vê e o que você, dono do negócio, enxerga do outro lado.</p>
+  </div>
+
+  <div class="lp-demo">
+
+    <!-- A -->
+    <div class="lp-cap">
+      <div class="ph">
+        <div class="ph-sc">
+          <div class="ph-st"><span>9:41</span><span>●●● ᯤ ▮</span></div>
+          <div class="ph-bd">
+            <div class="ui-brand">
+              <span class="ui-logo">B</span>
+              <span>
+                <span class="ui-bname">Bella Hair</span><br>
+                <span class="ui-open">Aberto agora</span>
+              </span>
+            </div>
+            <span class="ui-addr">Cabelo, unhas & maquiagem</span>
+            <div class="ui-card">
+              <div class="ui-info"><span>Segunda</span><b>Fechado</b></div>
+              <div class="ui-info"><span>Ter — Sex</span><b>09:00 — 20:00</b></div>
+              <div class="ui-info"><span>Sábado</span><b>08:00 — 17:00</b></div>
+            </div>
+            <span class="ui-lbl">Serviços em destaque</span>
+            <div class="ui-card">
+              <div class="ui-row">
+                <span><span class="ui-rname">Corte Feminino</span></span>
+                <span class="ui-dots"></span>
+                <span class="ui-price">R$ 90<span class="ui-dur">60 min</span></span>
+              </div>
+              <div class="ui-row">
+                <span><span class="ui-rname">Mechas / Ombré</span></span>
+                <span class="ui-dots"></span>
+                <span class="ui-price">R$ 380<span class="ui-dur">180 min</span></span>
+              </div>
+            </div>
+            <div class="ui-btn acc">Agendar</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:22px">
+        <span class="lp-capno">Tela 1</span>
+        <h3>Página pública</h3>
+        <p>Cada empresa ganha um endereço próprio, com logo, cores, serviços, equipe, horários e endereço. É a sua vitrine — no ar 24 horas.</p>
+      </div>
+    </div>
+
+    <!-- B -->
+    <div class="lp-cap">
+      <div class="ph">
+        <div class="ph-sc">
+          <div class="ph-st"><span>9:41</span><span>●●● ᯤ ▮</span></div>
+          <div class="ph-bd">
+            <div class="ui-steps"><i class="on"></i><b class="on"></b><i class="on"></i><b class="on"></b><i class="cur"></i><b></b><i></i></div>
+            <div>
+              <p class="ui-h">Revise o agendamento</p>
+              <p class="ui-sub">Tudo certo? Confirme para finalizar</p>
+            </div>
+            <div class="ui-card">
+              <div class="ui-srow"><span>Serviço</span><strong>Corte Feminino</strong></div>
+              <div class="ui-srow"><span>Quando</span><strong>Sáb, 10 out · 09:00</strong></div>
+              <div class="ui-srow"><span>Profissional</span><strong>Ana Beatriz</strong></div>
+              <div class="ui-srow"><span>Duração</span><strong>60 min</strong></div>
+              <div class="ui-srow"><span>Total</span><strong style="font-family:var(--font-serif);font-size:1.2em;color:var(--accent)">R$ 90</strong></div>
+            </div>
+            <span class="ui-lbl">Seus dados</span>
+            <div class="ui-card">
+              <div class="ui-info"><span>Nome</span><b>Mariana Alves</b></div>
+              <div class="ui-info"><span>WhatsApp</span><b>(11) 98765-4321</b></div>
+            </div>
+            <div class="ui-btn acc">Confirmar agendamento</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:22px">
+        <span class="lp-capno">Tela 2</span>
+        <h3>Agendamento em 4 etapas</h3>
+        <p>Serviço, data e hora, profissional e confirmação. Preço, duração e conflito de agenda são validados no servidor — nada de horário duplicado.</p>
+      </div>
+    </div>
+
+    <!-- C -->
+    <div class="lp-cap">
+      <div class="ph">
+        <div class="ph-sc">
+          <div class="ph-st"><span>9:41</span><span>●●● ᯤ ▮</span></div>
+          <div class="ph-bd">
+            <div class="ui-brand">
+              <span class="ui-logo">B</span>
+              <span>
+                <span class="ui-bname">Painel</span><br>
+                <span class="ui-srole">Bella Hair · sexta, 9 out</span>
+              </span>
+            </div>
+            <div class="ui-stats">
+              <span class="ui-stat"><b>7</b><span>Hoje</span></span>
+              <span class="ui-stat"><b>42</b><span>Semana</span></span>
+              <span class="ui-stat"><b>3.1k</b><span>Receita</span></span>
+            </div>
+            <span class="ui-lbl">Agenda do dia</span>
+            <div class="ui-card">
+              <div class="ui-info"><span>09:00 · Corte</span><b>Mariana A.</b></div>
+              <div class="ui-info"><span>10:30 · Coloração</span><b>Fernanda R. <i class="ui-pend">novo</i></b></div>
+              <div class="ui-info"><span>13:00 · Manicure</span><b>Carla M.</b></div>
+              <div class="ui-info"><span>15:30 · Ombré</span><b>Juliana P.</b></div>
+            </div>
+            <span class="ui-lbl">Cadastro rápido</span>
+            <div class="ui-staff"><span class="ui-av">+</span><span><span class="ui-sname">Serviços e equipe</span><span class="ui-srole">foto, preço e duração</span></span></div>
+            <div class="ui-btn">Abrir agenda</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:22px">
+        <span class="lp-capno">Tela 3</span>
+        <h3>Painel do gestor</h3>
+        <p>Você cadastra serviços, equipe (com foto), horários e a aparência da página, e acompanha a agenda do dia em tempo real — pelo celular ou computador.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════ CTA final ══════════ -->
+<section class="container">
+  <div class="lp-cta">
+    <h2>Pronto para encher a agenda?</h2>
+    <p>15 dias grátis, sem cartão e sem instalar nada. É só chamar no WhatsApp.</p>
+    <a class="btn btn-accent" href="https://wa.me/5544988074466" target="_blank" rel="noopener">
+      Teste grátis 15 dias <i data-lucide="arrow-right"></i>
+    </a>
+    <p class="lp-under">Fale com a gente: (44) 98807-4466</p>
+  </div>
+</section>
+
+<!-- ══════════ rodapé ══════════ -->
+<footer class="container site">
+  <span>Agende Já — agendamento online para o seu negócio</span>
+  <span>
+    <a href="https://wa.me/5544988074466" target="_blank" rel="noopener">Fale no WhatsApp</a>
+    &nbsp;·&nbsp; © 2026 Agende Já
+  </span>
+</footer>
+
 </div>
 
-<noscript>
-  <div style="padding:60px 24px;text-align:center;font-family:sans-serif">
-    <h1>JavaScript está desativado</h1>
-    <p>Ative o JavaScript no navegador para usar este site de agendamentos.</p>
-  </div>
-</noscript>
-
-<div id="app"></div>
-<div id="modal-root"></div>
-<div id="toast-root"></div>
-
-<script src="splash.js"></script>
-<script src="config.js"></script>
-<script src="app.js"></script>
-<script src="admin.js"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-
+<script>if (window.lucide) lucide.createIcons();</script>
 </body>
 </html>

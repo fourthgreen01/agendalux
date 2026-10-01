@@ -3,7 +3,8 @@
 Aplicação multi-tenant: cada empresa tem sua própria página e seu próprio painel.
 
 ```
-https://agendalux.vercel.app/                      → empresa padrão
+https://agende-ja.site/                            → landing page (apresentação do app)
+https://agendalux.vercel.app/atelier-solano        → empresa padrão
 https://agendalux.vercel.app/barbearia-do-luiz     → cor, nome, equipe e horários próprios
 https://agendalux.vercel.app/barbearia-do-lucas    → completamente diferente
 ```
@@ -12,7 +13,8 @@ https://agendalux.vercel.app/barbearia-do-lucas    → completamente diferente
 
 | Caminho | O que é |
 |---|---|
-| `index.html` + `splash.js` | página e **tela de carregamento** (com erro + "Tentar novamente") |
+| `index.html` | **landing page** da raiz (`/`) — apresenta o app e o teste grátis de 15 dias |
+| `app.html` + `splash.js` | SPA do multi-tenant e **tela de carregamento** (com erro + "Tentar novamente") |
 | `styles.css` | todo o visual |
 | `config.js` | estado global, camada de dados (API primeiro, demonstração local como fallback) |
 | `app.js` | site público, agendamento em etapas, WhatsApp, login/cadastro |
@@ -145,8 +147,8 @@ deployments novos).
 
 ## 4. Roteamento multi-tenant
 
-`vercel.json` reescreve qualquer caminho (exceto `/api/*`) para `index.html`.
-O front lê o **slug** do endereço e chama `GET /api/public?slug=...`.
+`vercel.json` reescreve qualquer caminho (exceto `/api/*` e a raiz) para `app.html`.
+A raiz (`/`) serve a landing (`index.html`). O front lê o **slug** do endereço e chama `GET /api/public?slug=...`.
 Para trocar o endereço: painel → **Aparência & página → Endereço da página (slug)**.
 
 ## 5. Modo demonstração

@@ -3,7 +3,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/:path((?!api).*)", "destination": "/" }
+    { "source": "/:path((?!api).*)", "destination": "/app.html" }
   ],
   "headers": [
     {
